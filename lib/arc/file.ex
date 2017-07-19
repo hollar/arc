@@ -9,7 +9,8 @@ defmodule Arc.File do
       |> Base.encode32()
       |> Kernel.<>(extension)
 
-    Path.join(System.tmp_dir, file_name)
+    {:ok, path} = Tempfile.random(file_name)
+    path
   end
 
   # Prevent temporary files flooding the disk

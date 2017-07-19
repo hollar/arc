@@ -32,6 +32,7 @@ defmodule Arc.Mixfile do
       applications: [
         :logger,
         :httpoison,
+        :tempfile,
       ] ++ applications(Mix.env)
     ]
   end
@@ -42,6 +43,7 @@ defmodule Arc.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.11"}, # Required for downloading remote files
+      {:tempfile, "~> 0.1.0"},
       {:ex_aws, "~> 1.1", optional: true},
       {:mock, "~> 0.1", only: :test},
       {:ex_doc, "~> 0.14", only: :dev},
