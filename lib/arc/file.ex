@@ -12,6 +12,14 @@ defmodule Arc.File do
     Path.join(System.tmp_dir, file_name)
   end
 
+  # Prevent temporary files flooding the disk
+  def remove_temporary_file(%__MODULE__{path: file_path}) do
+    if String.starts_with?(file_path, System.tmp_dir) do
+      File.rm(file_path)
+    end
+  end
+  def remove_temporary_file(term), do: term
+
   # Given a remote file
   def new(remote_path = "http" <> _) do
     uri = URI.parse(remote_path)

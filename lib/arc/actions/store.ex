@@ -8,7 +8,7 @@ defmodule Arc.Actions.Store do
   def store(definition, {file, scope}) when is_binary(file) or is_map(file) do
     arc_file = Arc.File.new(file)
     result = put(definition, {arc_file, scope})
-    remove_temporary_file(arc_file)
+    _ = Arc.File.remove_temporary_file(arc_file)
     result
   end
 
@@ -25,14 +25,6 @@ defmodule Arc.Actions.Store do
     case definition.validate({file, scope}) do
       true -> put_versions(definition, {file, scope})
       _    -> {:error, :invalid_file}
-    end
-  end
-
-  # Prevent temporary files flooding the disk
-  defp remove_temporary_file(error = {:error, _msg}), do: error
-  defp remove_temporary_file(%{path: file_path}) do
-    if String.starts_with?(file_path, System.tmp_dir) do
-      File.rm(file_path)
     end
   end
 
