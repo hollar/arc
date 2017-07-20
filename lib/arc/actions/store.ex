@@ -6,10 +6,21 @@ defmodule Arc.Actions.Store do
   end
 
   def store(definition, {file, scope}) when is_binary(file) or is_map(file) do
-    arc_file = Arc.File.new(file)
-    result = put(definition, {arc_file, scope})
-    _ = Arc.File.remove_temporary_file(arc_file)
-    result
+    # 1. Run in a process so the entry is removed from the Tempfile process afterwards.
+    # 2. Manually remove the file since `Tempfile.random` is only used to generate a partial path
+    # then the extension is appended to it so the path writen to is different than the path
+    # created by Tempfile.
+    #
+    # Yes this is not the ideal solution, as it also breaks the tests due to the `meck` package
+    # used for mocking. But it fixes the flooding of tmp directory for now and avoids an
+    # unbounded process.
+    #
+    Task.async(fn ->
+      arc_file = Arc.File.new(file)
+      result = put(definition, {arc_file, scope})
+      _ = Arc.File.remove_temporary_file(arc_file)
+      result
+    end) |> Task.await(version_timeout())
   end
 
   def store(definition, filepath) when is_binary(filepath) or is_map(filepath) do
