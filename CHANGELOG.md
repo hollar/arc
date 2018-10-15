@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.11.0 (2018-10-04)
+  * (Dependency) `:httpoison` removed in favor of `:hackney`
+  * (Enhancement) Proper generator file location for Phoenix 1.3+
+  * (Enhancement) Support setting asset_host to `false` in the app config to revert to the default
+  * (Enhancement) Allow overriding asset_host in an individual definition module
+  * (Enhancement) Definitions can conditionally skip a version or transformation
+
+## v0.10.0 (2018-06-19)
+  * (Dependency) `:ex_aws` increased to `~> 2.0`
+  * (Dependency) `:ex_aws_s3` added at `~> 2.0`
+
+## v0.9.0 (2018-06-19)
+  * (Enhancement) Allow overriding the destination bucket in an upload definition. See (https://github.com/stavro/arc/pull/206)
+  * (Enhancement) Allow overriding the `storage_dir` via configuration
+  * (Enhancement) Skip uploading all files if any of the versions fail (PR: https://github.com/stavro/arc/pull/218)
+
 ## v0.8.0 (2017-04-20)
   * (Enhancement) Fix elixir warnings.
   * (Enhancement) Allow delete/1 to be overridden.
